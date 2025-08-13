@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGNN - Phishing Detection</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=VT323&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <nav class="main-nav">
+        <div class="nav-logo">
+            PhishGNN
+        </div>
+        <div class="nav-links">
+            <a href="#training" class="nav-link active" data-page="training">Training</a>
+            <a href="#predict" class="nav-link" data-page="predict">Prediction</a>
+            <a href="#dashboard" class="nav-link" data-page="dashboard">Dashboard</a>
+        </div>
+    </nav>
+
+    <main id="app-content">
+    </main>
+
+    <template id="page-training">
+        <div class="page-container">
+            <header class="page-header">
+                <h1>Model Training</h1>
+                <p>Upload a dataset to run the Phishcrawler and train a new GNN model.</p>
+            </header>
+            <div class="content-grid-training">
+                <div class="control-panel card">
+                    <h2>1. Upload Dataset</h2>
+                    <p>Select a `.txt` or `.csv` file containing URLs.</p>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="file-upload" accept=".txt,.csv" hidden />
+                        <label for="file-upload" class="file-upload-label">
+                            <span id="file-name">Click to select a file...</span>
+                        </label>
+                    </div>
+
+                    <h2 class="mt-4">2. Phishcrawler Parameters</h2>
+                    <div class="form-check">
+                        <input type="checkbox" id="enable-params-train">
+                        <label for="enable-params-train">Enable Custom Parameters</label>
+                    </div>
+                    <div id="params-container-train" class="params-container disabled">
+                        <div class="param-group">
+                            <label for="depth-train">Crawl Depth</label>
+                            <input type="number" id="depth-train" value="2" min="1" disabled>
+                        </div>
+                        <div class="param-group">
+                            <label for="workers-train">Workers</label>
+                            <input type="number" id="workers-train" value="50" min="1" disabled>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="isphish-train" disabled>
+                            <label for="isphish-train">Label all as Phishing</label>
+                        </div>
+                    </div>
+
+                    <h2 class="mt-4">3. Start Process</h2>
+                    <button id="start-train-btn" class="action-btn" disabled>Select a File to Start</button>
+
+                    <p style="text-align: center; margin: 1rem 0;">- OR -</p>
+                    <button id="train-existing-btn" class="action-btn">Train from Existing CSVs</button>
+                </div>
+                <div class="terminal-container card">
+                    <div class="terminal-header">
+                        <span>PROCESS OUTPUT</span>
+                    </div>
+                    <div id="terminal-train" class="terminal">
+                        <p>Waiting for backend connection...</p>
+                        <div class="cursor"></div>
+                    </div>
+                </div>
+                <div id="training-dashboard" class="dashboard-container card hidden">
+                    <div class="dashboard-header">
+                        <h2>Training Results Dashboard</h2>
+                        <p>Visualization of the newly trained model and dataset.</p>
+                    </div>
+                    <div class="dashboard-content">
+                        <div class="dashboard-item">
+                            <h3>Graph Visualization</h3>
+                            <iframe src="about:blank" id="train-graph-viz-frame" class="graph-container"
+                                title="Graph Visualization"></iframe>
+                            <div class="graph-controls">
+                                <button id="train-prev-graph-btn" class="graph-btn">Previous</button>
+                                <span id="train-graph-info">Graph 0 / 0</span>
+                                <button id="train-next-graph-btn" class="graph-btn">Next</button>
+                            </div>
+                        </div>
+                        <div class="dashboard-item">
+                            <h3>t-SNE Embedding Plot</h3>
+                            <img src="https://placehold.co/600x400/1e1e2e/ffffff?text=Plot+Unavailable" alt="t-SNE Plot"
+                                id="train-tsne-plot-img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="page-predict">
+        <div class="page-container">
+            <header class="page-header">
+                <h1>URL Prediction</h1>
+                <p>Analyze a single URL to get a real-time phishing prediction.</p>
+            </header>
+
+            <div class="content-grid-training">
+
+                <div class="control-panel card">
+                    <h2>1. Analyze Single URL</h2>
+                    <p>Enter a URL to run the Phishcrawler and get a prediction.</p>
+                    <div class="url-input-group">
+                        <input type="text" id="url-input" placeholder="https://example.com">
+                    </div>
+                    <button id="analyze-url-btn" class="action-btn">Analyze</button>
+
+                    <h2 class="mt-4">2. Phishcrawler Parameters</h2>
+                    <div class="form-check">
+                        <input type="checkbox" id="enable-params-predict">
+                        <label for="enable-params-predict">Enable Custom Parameters</label>
+                    </div>
+                    <div id="params-container-predict" class="params-container disabled">
+                        <div class="param-group">
+                            <label for="depth-predict">Crawl Depth</label>
+                            <input type="number" id="depth-predict" value="1" min="1" disabled>
+                        </div>
+                        <div class="param-group">
+                            <label for="workers-predict">Workers</label>
+                            <input type="number" id="workers-predict" value="50" min="1" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="terminal-container card">
+                    <div class="terminal-header">
+                        <span>ANALYSIS OUTPUT</span>
+                    </div>
+                    <div id="terminal-predict" class="terminal">
+                        <p>Waiting for backend connection...</p>
+                        <div class="cursor"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <template id="page-dashboard">
+        <div class="page-container">
+            <header class="page-header">
+                <h1>Latest Model Dashboard</h1>
+                <p>Visualization of the latest available dataset and model embeddings.</p>
+            </header>
+            <div class="dashboard-container card">
+                <div class="dashboard-content">
+                    <div class="dashboard-item">
+                        <h3>Graph Visualization</h3>
+                        <iframe src="about:blank" id="main-graph-viz-frame" class="graph-container"
+                            title="Graph Visualization">
+                            <p class="graph-placeholder">Run a training process to generate visualizations.</p>
+                        </iframe>
+                        <div class="graph-controls">
+                            <button id="main-prev-graph-btn" class="graph-btn">Previous</button>
+                            <span id="main-graph-info">Graph 0 / 0</span>
+                            <button id="main-next-graph-btn" class="graph-btn">Next</button>
+                        </div>
+                    </div>
+                    <div class="dashboard-item">
+                        <h3>t-SNE Embedding Plot</h3>
+                        <img src="/viz/embedding_plot.png" alt="t-SNE Plot" id="dashboard-tsne-plot-img"
+                            onerror="this.src='https://placehold.co/600x400/1e1e2e/ffffff?text=Plot+Not+Found';">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

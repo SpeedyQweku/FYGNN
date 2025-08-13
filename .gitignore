@@ -1,0 +1,16 @@
+.env
+*.txt
+*.csv
+reader.py
+*.png
+*.bat
+*.b
+__pycache__
+training.py_bk
+visualization/
+uploads/
+hgt.py
+phishcrawler
+processed_data
+
+!requirements.txt
