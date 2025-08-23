@@ -1,2 +1,3 @@
 # FYGNN
-Final Year Project
+
+Spam Domain Detection Using Graph Neural Network(GNN) - Final Year Project

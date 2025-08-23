@@ -1,0 +1,25 @@
+torch
+torch-geometric
+torchvision
+dgl -f https://data.dgl.ai/wheels/repo.html
+dglgo -f https://data.dgl.ai/wheels/repo.html
+networkx
+pandas
+numpy
+scikit-learn
+matplotlib
+python-whois
+requests
+tldextract
+beautifulsoup4
+uvicorn
+tldextract
+sentence-transformers
+pyvis
+pyg-lib -f https://data.pyg.org/whl/torch-2.7.0+cpu.html
+Flask
+Flask-SocketIO
+python-engineio
+python-socketio
+simple-websocket
+xgboost
