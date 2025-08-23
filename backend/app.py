@@ -8,7 +8,7 @@ from flask_socketio import SocketIO, emit
 # Configuration
 BACKEND_ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_FOLDER = os.path.join(BACKEND_ROOT_DIR, "..", "frontend")
-PHISHCRAWLER_DIR = os.path.join(BACKEND_ROOT_DIR, "..", "phishcrawler")
+PHISHCRAWLER_DIR = os.path.join(BACKEND_ROOT_DIR, "..", "phishcrawler_go")
 PHISHGNN_DIR = os.path.join(BACKEND_ROOT_DIR, "..", "phishgnn_model")
 UPLOAD_FOLDER = os.path.join(PHISHCRAWLER_DIR, "uploads")
 VIZ_FOLDER = os.path.join(PHISHGNN_DIR, "visualization")
